@@ -12,14 +12,15 @@ amount = doc.find_all(class_="wprm-recipe-ingredient-amount") #ingredient quanti
 unit = doc.find_all(class_="wprm-recipe-ingredient-unit") #ingredient unit of measure
 ingredients = doc.find_all(class_="wprm-recipe-ingredient-name") #ingredient name
 
-print(name)
-for i in range(len(ingredients)):
-    print(amount[i].text, unit[i].text, ingredients[i].text)
+# print(name)
+# for i in range(len(ingredients)):
+#     print(amount[i].text, unit[i].text, ingredients[i].text)
 
-# recipee = {'name':name,
-#            'amount':amount,
-#            'unit':unit,
-#            'ingredients':ingredients}
+recipee = {'name':name,
+           'amount':amount,
+           'unit':unit,
+           'ingredients':ingredients}
 
-# df = pd.DataFrame(recipee)
-# #df['amount'] = df['amount'].astype(str)
+df = pd.DataFrame(recipee)
+print(df)
+#df['amount'] = df['amount'].astype(str)

@@ -2,29 +2,34 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
-def get_ingredients(url):
+def get_html(url):
     result = requests.get(url)
     doc = BeautifulSoup(result.text, "html.parser")
-    if doc.find(class_="wprm-recipe-container"):
-        list = doc.find_all('ul',class_="wprm-recipe-ingredients")
-        df = pd.DataFrame(columns=['amount', 'unit', 'ingredient'])
-        count = 0
-        for ul in list:
-            for li in ul:
-                count += 1
+    raw_data = doc.find(class_="wprm-recipe wprm-recipe-template-cwm")
+    name = doc.find(class_="wprm-recipe-name wprm-block-text-bold").text
+    dict = {'name':name, 'url':url, 'data':raw_data}
+    df = pd.Series(data=dict)
+    return(df)
+
+def get_ingredients(html):
+    list = html.find_all('ul',class_="wprm-recipe-ingredients")
+    df = pd.DataFrame(columns=['amount', 'unit', 'ingredient'])
+    count = 0
+    for ul in list:
+        for li in ul:
+            count += 1
     
-            for i in range(count):
-                list = doc.find_all('li', class_="wprm-recipe-ingredient")[i]
-                if list.find(class_="wprm-recipe-ingredient-amount"):
-                    amount = list.find(class_="wprm-recipe-ingredient-amount").text
-                else: amount=''
-                if list.find(class_="wprm-recipe-ingredient-unit"):
-                    unit = list.find(class_="wprm-recipe-ingredient-unit").text
-                else: unit=''
-                ingredient = list.find(class_="wprm-recipe-ingredient-name").text
-                new_row = pd.Series({'amount':amount, 'unit':unit, 'ingredient':ingredient})
-                df = pd.concat([df, new_row.to_frame().T], axis=0, ignore_index=True)
-    else: print('RECIPEE CONTAINER DNE')
+    for i in range(count):
+        list = html.find_all('li', class_="wprm-recipe-ingredient")[i]
+        if list.find(class_="wprm-recipe-ingredient-amount"):
+            amount = list.find(class_="wprm-recipe-ingredient-amount").text
+        else: amount=''
+        if list.find(class_="wprm-recipe-ingredient-unit"):
+            unit = list.find(class_="wprm-recipe-ingredient-unit").text
+        else: unit=''
+        ingredient = list.find(class_="wprm-recipe-ingredient-name").text
+        new_row = pd.Series({'amount':amount, 'unit':unit, 'ingredient':ingredient})
+        df = pd.concat([df, new_row.to_frame().T], axis=0, ignore_index=True)
     return(df)
 
 def get_urls(url):

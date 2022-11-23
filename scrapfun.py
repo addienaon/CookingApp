@@ -8,8 +8,8 @@ def get_html(url):
     raw_data = doc.find(class_="wprm-recipe wprm-recipe-template-cwm")
     name = doc.find(class_="wprm-recipe-name wprm-block-text-bold").text
     dict = {'name':name, 'url':url, 'data':raw_data}
-    df = pd.Series(data=dict)
-    return(df)
+    row = pd.Series(data=dict)
+    return(row)
 
 def get_ingredients(html):
     list = html.find_all('ul',class_="wprm-recipe-ingredients")
@@ -51,6 +51,9 @@ def get_urlpack():
     result = requests.get(url)
     doc = BeautifulSoup(result.text, "html.parser")
     i = 1
+    with open('url_container_pack.txt', 'r') as filedata:
+            url_list = filedata.readlines()
+    
     while doc.find('article', class_="article-thumb article-facet"):
         pack += get_urls(url)
         i += 1
@@ -72,3 +75,20 @@ def get_container_pack():
         for line in container_pack:
             f.write(line)
             f.write('\n')
+    return(i) #i: page last scraped
+
+def check_new_url():
+    with open('url_container_pack.txt', 'r') as f:
+        data = f.readlines()
+        data = [data[i].rstrip('\n') for i in range(len(data))]
+        f.close()
+    pack = []
+    url = "https://www.cookwithmanali.com/recipes/?_paged=1"
+    result = requests.get(url)
+    doc = BeautifulSoup(result.text, "html.parser")
+    if doc.find('article', class_="article-thumb article-facet"):
+        pack = get_urls(url)
+    lineset = set(data)
+    packset = set(pack)
+    new_url_ls = packset.difference(lineset)   
+    return (new_url_ls)

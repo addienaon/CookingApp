@@ -90,5 +90,5 @@ def check_new_url():
         pack = get_urls(url)
     lineset = set(data)
     packset = set(pack)
-    new_url_ls = packset.difference(lineset)   
+    new_url_ls = packset.difference(lineset)  
     return (new_url_ls)

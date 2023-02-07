@@ -9,12 +9,17 @@ class Food(models.Model):
         managed = False
         db_table = 'food'
 
+class Category(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'category'
+
 class Ingredient(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-    type = models.CharField(max_length=50, blank=True, null=True)
-
-    # def __str__(self):
-    #     return self.name
+    category = models.ForeignKey(Category, models.DO_NOTHING)
+    selected = models.BooleanField(default=False)
 
     class Meta:
         managed = False

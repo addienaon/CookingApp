@@ -2,20 +2,25 @@
 
 {% block content %}
 <h1>My Food Items</h1>
-    {% for item in object %}
-        <p><input type="checkbox" name="selected" value="{{ item.pk }}" {% if item.selected %}checked{% endif %}> {{ item.user_input }}</p>
-    {% endfor %}
-    <form method='POST'> {% csrf_token %}
-        {% for field in form %}
-            <div>
-                {{ field.label_tag }} {{ field }}
-                {% for error in field.errors %}
-                    <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
+<form method='POST'> 
+    {% csrf_token %}
+    <div class="form-group d-flex justify-content-center">
+      {% for field in form %}
+        {{ field.label_tag }}
+        <input type="text" class="form-control" name="{{ field.html_name }}" id="{{ field.auto_id }}" placeholder="Add New Ingredient">
+        {% for error in field.errors %}
+          <span class="error">{{ error }}</span>
         {% endfor %}
-        <input type='submit' value='Save' />
-        <input type='submit' name='delete' value='Delete' />
+      {% endfor %}
+      <input type='submit' name='save' value='Save' class="btn btn-primary"/>
+    </div>
+  </form>
+    <form action="{% url 'deletefood' %}" method='POST'> {% csrf_token %}
+        {% for item in object %}
+            <p><input type="checkbox" name="selected" value="{{ item.pk }}" {% if item.selected %}checked{% endif %}> 
+                {{ item.user_input }}</p>
+        {% endfor %}
+        <input type='submit' name='delete' value='Delete' class="btn btn-danger"/>
     </form>
 
 {% endblock %}

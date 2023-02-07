@@ -25,10 +25,17 @@ class Fridge(models.Model):
         managed = False
         db_table = 'fridge'
 
+class Category(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
 
+    class Meta:
+        managed = False
+        db_table = 'category'
+
+        
 class Ingredient(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-    type = models.CharField(max_length=50, blank=True, null=True)
+    type = models.ForeignKey(Category, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -62,3 +69,4 @@ class Unit(models.Model):
     class Meta:
         managed = False
         db_table = 'unit'
+

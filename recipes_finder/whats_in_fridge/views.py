@@ -4,27 +4,22 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .serializers import MyFoodSerializer, IngredientSerializer
-from .models import MyFood, Ingredient, Recipes, Recipe
+from .models import MyFood, Ingredient, Recipes, Recipe, Category
 from .forms import MyFoodForm
-from django.db.models import Count
+from django.db.models import Count, F, Q
 # Create your views here.
 
-def myfood_create_view(request):
+def create_myfood_view(request):
     obj = MyFood.objects.all()  # Retrieve all existing food items
     if request.method == "POST":
-        if "delete" in request.POST:
-            # The "delete" button was pressed
-            selected_items = request.POST.getlist("selected")  # Get a list of the selected items
-            MyFood.objects.filter(pk__in=selected_items).delete()  # Delete the selected items
-        else:
-            form = MyFoodForm(request.POST)
-            if form.is_valid():
-                user_input = form.cleaned_data.get('user_input')
+        form = MyFoodForm(request.POST)
+        if form.is_valid():
+            user_input = form.cleaned_data.get('user_input')
                 # check if user_input value already exists in obj list
-                if not obj.filter(user_input=user_input).exists():
-                    form.save()
-                else:
-                    form.add_error('user_input', 'This food item already exists')
+            if not obj.filter(user_input=user_input).exists():
+                form.save()
+            else:
+                form.add_error('user_input', 'This food item already exists')
     else:
         form = MyFoodForm()
     context = {
@@ -35,12 +30,25 @@ def myfood_create_view(request):
 
 
 def all_ingredients_view(request, *args, **kwargs):
-   obj = Ingredient.objects.all()
-   context = {
-        'object': obj
+    obj = Ingredient.objects.all()
+   
+    ingredient_data = [
+        {
+            'id': ingredient.id,
+            'name': ingredient.name,
+            'type': ingredient.category.name,
+        
+        }
+        
+        for ingredient in obj
+    ]
+    ingredient_categories = set(ingredient.category.name for ingredient in obj)
+    context = {
+        'ingredient_data': ingredient_data,
+        'ingredient_categories': ingredient_categories,
     }
-
-   return render(request, "ingredients.html", context)    
+    return render(request, "ingredients.html", context)
+  
 
 
 def recipes_view(request, *args, **kwargs):
@@ -66,7 +74,29 @@ def recipes_view(request, *args, **kwargs):
     return render(request, "recipes.html", context)
 
 
-def delete_my_food(request, id):
-    food_item = MyFood.objects.get(id=id)
-    food_item.delete()
-    return redirect("/myfood_create_view")
+def delete_my_food(request):
+    if request.method == 'POST':
+        id_list = request.POST.getlist("selected")
+        for food_item in id_list:
+            food_item = int(food_item)
+            MyFood.objects.filter(pk=food_item).delete()
+    return redirect("/myfood/create")
+
+def add_ingredients(request):
+    if request.method == 'POST':
+        id_list = request.POST.getlist("selected")
+        for ingredient_id in id_list:
+            ingredient_id = int(ingredient_id)
+            ingredient = Ingredient.objects.filter(pk=ingredient_id).first()
+            MyFood.objects.create(fk_ingredient=ingredient, user_input=ingredient.name)
+    return redirect("/myfood/create")
+
+def single_recipe_view(request, id, name):
+    recipe = Recipe.objects.filter(id=id) \
+    .annotate(ingredient_name=F('recipes__ingredient__name')) \
+    .values('name', 'id', 'ingredient_name') 
+    context = {'object':recipe, 'recipe_name': name}
+
+    return render(request, "recipe.html", context)
+
+

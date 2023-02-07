@@ -100,3 +100,8 @@ def single_recipe_view(request, id, name):
     return render(request, "recipe.html", context)
 
 
+
+def delete_my_food(request, id):
+    food_item = MyFood.objects.get(id=id)
+    food_item.delete()
+    return redirect("/myfood_create_view")

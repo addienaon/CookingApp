@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center">
+    <div class="card w-50 mt-5">
+      <h1 class="text-center mb-3">{{ recipe_name }}</h1>
+        {% for my_sub_item in object %}
+          <li class="list-group-item">{{ my_sub_item.ingredient_name | capfirst }}</li>
+        {% endfor %}
+    </div>
+  </div>
+{% endblock %}

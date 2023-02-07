@@ -1,10 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h1>Ingredients</h1>
-<p>
-{% for my_sub_item in object %}
-    <li>{{ my_sub_item.name|capfirst }}</li>
-{% endfor %}
-</p>
+   <style>
+  .card-body .ingredients {
+    height: 200px;
+    overflow-y: scroll;
+    width: 100%;
+  }
+</style>
+<div class="row">
+  {% for category in ingredient_categories %}
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header">{{ category }}</div>
+        <div class="card-body">
+          <div class="ingredients">
+          <form action="{% url 'add_ingredients' %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="Add">
+            {% for ingredient in ingredient_data %}
+              {% if ingredient.type == category %}
+                <div>
+                  <input type="checkbox" class="ingredient-checkbox" name="selected" value="{{ ingredient.id }}"> {{ ingredient.name }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if forloop.counter0|divisibleby:3 %}
+      </div>
+      <div class="row">
+    {% endif %}
+  {% endfor %}
+</div>
+
+
 {% endblock %}

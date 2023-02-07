@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "whats_in_fridge.apps.WhatsInFridgeConfig",
-    "rest_framework"
+    "rest_framework",
 ]
 
 MIDDLEWARE = [

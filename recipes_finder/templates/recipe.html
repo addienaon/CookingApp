@@ -1,9 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style type="text/css">
+  .container {
+    padding-top: 10px;
+  }
+  
+  .card {
+    background-color: #6ea777;
+    padding: 30px;
+    border-radius: 10px;
+    line-height: 0.5;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .list-group-item {
+    margin-bottom: 0px;
+  }
+</style>
 <div class="container d-flex justify-content-center">
     <div class="card w-50 mt-5">
       <h1 class="text-center mb-3">{{ recipe_name }}</h1>
+      <h5 class="text-center mb-3"> INGREDIENTS </h5>
         {% for my_sub_item in object %}
           <li class="list-group-item">{{ my_sub_item.ingredient_name | capfirst }}</li>
         {% endfor %}

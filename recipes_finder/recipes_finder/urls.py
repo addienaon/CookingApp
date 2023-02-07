@@ -1,3 +1,6 @@
+from django.contrib import admin
+from django.urls import path, include
+from whats_in_fridge.views import all_ingredients_view, single_recipe_view, recipes_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),

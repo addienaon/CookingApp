@@ -108,8 +108,22 @@ def add_ingredients(request):
 
 def single_recipe_view(request, id, name):
     recipe = Recipe.objects.filter(id=id) \
-    .annotate(ingredient_name=F('recipes__ingredient__name')) \
-    .values('name', 'id', 'ingredient_name') 
-    context = {'object':recipe, 'recipe_name': name}
+    .annotate(ingredient_name=F('recipes__ingredient__name'), amount=F('recipes__amount'), unit_type=F('recipes__unit__type')) \
+    .values('name', 'id', 'ingredient_name', 'amount', 'unit_type')
+    print(recipe)
+    recipe_data = [
+    {
+        'recipe_name': ingredient['name'],
+        'ingredient_name': ingredient['ingredient_name'],
+        'amount': ingredient['amount'] if ingredient['amount'] is not None else '',
+        'unit_type': ingredient['unit_type'] if ingredient['unit_type'] is not None else '',
+    }
+    for ingredient in recipe
+    ]
 
+    context = { 
+        'recipe':recipe_data,
+    }
+    
     return render(request, "recipe.html", context)
+

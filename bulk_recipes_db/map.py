@@ -1,3 +1,6 @@
+# I used this to make the db data uniform. It was extermely time intensive and probably the worst path I could have selected.
+# I have learned new techniques since doing this. They will be employed in the pipeline. 
+
 ingredient_dict = {
     #garlic:
         'garlic cloves':'garlic', 'garlic clove':'garlic', 'minced garlic':'garlic', 'garlic cloves ':'garlic', 'cloves garlic':'garlic', 'chopped garlic':'garlic', 'grated garlic':'garlic', 'garlic cloves [12 grams]':'garlic', 'large garlic cloves':'garlic', 'large garlic clove':'garlic', 'finely chopped garlic':'garlic', 'cube dorot garlic or 1 teaspoon minced garlic':'garlic', 'large garlic':'garlic', 'big garlic cloves':'garlic', 'finely chopped garlic [from 3-4 garlic pods]':'garlic', 'garlic pods':'garlic', 'finely chopped garlic [optional]':'garlic',

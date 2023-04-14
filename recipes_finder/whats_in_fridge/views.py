@@ -10,21 +10,34 @@ from django.db.models import Count, F, Q
 # Create your views here.
 
 def create_myfood_view(request):
-    obj = MyFood.objects.all()  # Retrieve all existing food items
+    myfood_data = MyFood.objects.all()  # Retrieve all existing food items
+    myfood_categories = set(i.fk_ingredient.category.name for i in myfood_data.all())
+    myfood_categories = sorted(list(myfood_categories))
     if request.method == "POST":
         form = MyFoodForm(request.POST)
         if form.is_valid():
             user_input = form.cleaned_data.get('user_input')
                 # check if user_input value already exists in obj list
-            if not obj.filter(user_input=user_input).exists():
+            if not myfood_data.filter(user_input=user_input).exists():
                 form.save()
             else:
                 form.add_error('user_input', 'This food item already exists')
     else:
         form = MyFoodForm()
+    myfood_data = [
+        {
+            'id': food.id,
+            'user_input': food.user_input,
+            'selected': food.selected,
+            'type': food.fk_ingredient.category.name,
+        }
+        for food in myfood_data
+    ]
     context = {
         'form':form,
-        'object': obj
+        'myfood_data': myfood_data, 
+        'myfood_categories': myfood_categories
+
     }
     return render(request, "myfood_create.html", context)
 
@@ -43,6 +56,8 @@ def all_ingredients_view(request, *args, **kwargs):
         for ingredient in obj
     ]
     ingredient_categories = set(ingredient.category.name for ingredient in obj)
+    ingredient_categories = sorted(list(ingredient_categories))
+
     context = {
         'ingredient_data': ingredient_data,
         'ingredient_categories': ingredient_categories,
@@ -89,19 +104,26 @@ def add_ingredients(request):
             ingredient_id = int(ingredient_id)
             ingredient = Ingredient.objects.filter(pk=ingredient_id).first()
             MyFood.objects.create(fk_ingredient=ingredient, user_input=ingredient.name)
-    return redirect("/myfood/create")
+    return redirect("/ingredients")
 
 def single_recipe_view(request, id, name):
     recipe = Recipe.objects.filter(id=id) \
-    .annotate(ingredient_name=F('recipes__ingredient__name')) \
-    .values('name', 'id', 'ingredient_name') 
-    context = {'object':recipe, 'recipe_name': name}
+    .annotate(ingredient_name=F('recipes__ingredient__name'), amount=F('recipes__amount'), unit_type=F('recipes__unit__type')) \
+    .values('name', 'id', 'ingredient_name', 'amount', 'unit_type')
+    print(recipe)
+    recipe_data = [
+    {
+        'recipe_name': ingredient['name'],
+        'ingredient_name': ingredient['ingredient_name'],
+        'amount': ingredient['amount'] if ingredient['amount'] is not None else '',
+        'unit_type': ingredient['unit_type'] if ingredient['unit_type'] is not None else '',
+    }
+    for ingredient in recipe
+    ]
 
+    context = { 
+        'recipe':recipe_data,
+    }
+    
     return render(request, "recipe.html", context)
 
-
-
-def delete_my_food(request, id):
-    food_item = MyFood.objects.get(id=id)
-    food_item.delete()
-    return redirect("/myfood_create_view")

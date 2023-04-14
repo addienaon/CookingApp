@@ -1,12 +1,74 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style type="text/css">
+  .container {
+    padding-top: 10px;
+  }
+  
+  .card {
+    background-color: #6ea777;
+    padding: 30px;
+    border-radius: 10px;
+    line-height: 0.5;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  .ingredient-column {
+    float: left;
+    width: 33.33%;
+    text-align: center;
+    padding: 5px;
+  }
+  .amount-column {
+    float: left;
+    width: 33.33%;
+    text-align: center;
+    padding: 5px;
+  }
+  .unit-column {
+    float: right;
+    width: 33.33%;
+    text-align: center;
+    padding: 5px;
+  }
+  .list-group-item {
+    margin-bottom: 0px;
+  }
+  
+  .column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+    text-align: center;
+  }
+</style>
 <div class="container d-flex justify-content-center">
     <div class="card w-50 mt-5">
       <h1 class="text-center mb-3">{{ recipe_name }}</h1>
-        {% for my_sub_item in object %}
-          <li class="list-group-item">{{ my_sub_item.ingredient_name | capfirst }}</li>
+      <h5 class="text-center mb-3"> INGREDIENTS </h5>
+      <div class="ingredient-column">
+        <h6 class="text-center mb-3">INGREDIENT NAME</h6>
+        {% for ingredient in recipe %}
+          <li class="list-group-item">{{ ingredient.ingredient_name | capfirst }}</li>
         {% endfor %}
+      </div>
+      <div class="amount-column">
+        <h6 class="text-center mb-3">AMOUNT</h6>
+        {% for ingredient in recipe %}
+          <li class="list-group-item">{{ ingredient.amount }}</li>
+        {% endfor %}
+      </div>
+      <div class="unit-column">
+        <h6 class="text-center mb-3">UNIT TYPE</h6>
+        {% for ingredient in recipe %}
+          <li class="list-group-item">{{ ingredient.unit_type }}</li>
+        {% endfor %}
+      </div>
     </div>
   </div>
+
 {% endblock %}

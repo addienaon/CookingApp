@@ -3,10 +3,10 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 import pyodbc
 import pandas as pd
-from bulk_recipes_db.scrapfun import get_html, get_container_pack, check_new_url, get_ingredients, unit_word_mapper, ingredient_map, num_amount, breakup_ingredients
+from bulk_recipes_db.scrapfun import get_recipe_details, get_nutrition, get_html, get_container_pack, check_new_url, get_ingredients, unit_word_mapper, ingredient_map, num_amount, breakup_ingredients
 from localsettings import postgressql 
 import os
-from models import Base, Recipe, Ingredient, Unit, Recipes, Food
+from models import Base, Recipe, Ingredient, Unit, Recipes, Food, Nutrition
 from bs4 import BeautifulSoup
 import json 
 
@@ -237,10 +237,98 @@ def recipe_populate(session):
                 entry = Recipes(recipe_id,amount,unit_id,ingredient_id)
                 session.add(entry)
                 session.commit()
+
+def details_populate(session):
+    # query for all recipe ids
+    rec_ls = session.query(Recipe._id).all()
+    for recipe in rec_ls:
+        # get recipe object and extract data
+        rec_id = recipe[0]
+        recipe = session.query(Recipe).filter(Recipe._id==rec_id).first()
+        data = {'name':recipe.name, 'url':recipe.url, 'data':recipe.data}
+        row_as_dict = dict(data)
+        html = row_as_dict['data']
+        soup = BeautifulSoup(html, 'html.parser')
+        details_dict = get_recipe_details(soup)
+        
+        # update recipe with cuisine and servings
+        recipe.cuisine = details_dict.get('cuisine')
+        recipe.servings = details_dict.get('servings')
+        session.add(recipe)
+        
+    session.commit()
+
+def get_unit_id(session, unit_name):
+    unit = session.query(Unit).filter(Unit.type == unit_name).first()
+    if unit is None:
+        unit = Unit(type=unit_name)
+        session.add(unit)
+        session.commit()
+    return unit._id
+
+
+##NEED TO EITHER UPDATE ALL THE NAMES IN THE DICTRIONARY TO MATCH THE MODEL OR SPECIFICALLY ASSIGN THEM IN THIS CODE BLOCK.
+def nutrition_populate(session):
+    for recipe in session.query(Recipe):
+        data = {'name': recipe.name, 'url': recipe.url, 'data': recipe.data}
+        row_as_dict = dict(data)
+        html = row_as_dict['data']
+        soup = BeautifulSoup(html, 'html.parser')
+        nutrition_dict = get_nutrition(soup)
+        nutrition_dict_ids = {}
+        for key, value in nutrition_dict.items():
+            if key.endswith('_unit'):
+                unit_name = value
+                if unit_name:
+                    unit_id = get_unit_id(session, unit_name)
+                else: unit_id = None
+                new_key = key.replace('_unit', '_unit_id')
+                nutrition_dict_ids[new_key] = unit_id
+            else:
+                nutrition_dict_ids[key] = value          
+        nutrition = Nutrition(recipe_id=recipe._id, 
+                              calories_amount=nutrition_dict_ids['calories_amount'], 
+                              calories_unit_id=nutrition_dict_ids['calories_unit_id'], 
+                              carbohydrates_amount=nutrition_dict_ids['carbohydrates_amount'], 
+                              carbohydrates_unit_id = nutrition_dict_ids['carbohydrates_unit_id'], 
+                              protein_amount=nutrition_dict_ids['protein_amount'], 
+                              protein_unit_id=nutrition_dict_ids['protein_unit_id'], 
+                              fat_amount=nutrition_dict_ids['fat_amount'], 
+                              fat_unit_id=nutrition_dict_ids['fat_unit_id'], 
+                              saturated_fat_amount=nutrition_dict_ids['saturated_fat_amount'],
+                              saturated_fat_unit_id=nutrition_dict_ids['saturated_fat_unit_id'], 
+                              polyunsaturated_fat_amount=nutrition_dict_ids['polyunsaturated_fat_amount'], 
+                              polyunsaturated_fat_unit_id=nutrition_dict_ids['polyunsaturated_fat_unit_id'],
+                              monounsaturated_fat_amount=nutrition_dict_ids['monounsaturated_fat_amount'], 
+                              monounsaturated_fat_unit_id=nutrition_dict_ids['monounsaturated_fat_unit_id'],
+                              trans_fat_amount=nutrition_dict_ids['trans_fat_amount'],
+                              trans_fat_unit_id=nutrition_dict_ids['trans_fat_unit_id'], 
+                              cholesterol_amount=nutrition_dict_ids['cholesterol_amount'],
+                              cholesterol_unit_id=nutrition_dict_ids['cholesterol_unit_id'],
+                              sodium_amount=nutrition_dict_ids['sodium_amount'],
+                              sodium_unit_id=nutrition_dict_ids['sodium_unit_id'], 
+                              potassium_amount=nutrition_dict_ids['potassium_amount'],
+                              potassium_unit_id=nutrition_dict_ids['potassium_unit_id'],
+                              fiber_amount=nutrition_dict_ids['fiber_amount'],
+                              fiber_unit_id=nutrition_dict_ids['fiber_unit_id'],
+                              sugar_amount=nutrition_dict_ids['sugar_amount'],
+                              sugar_unit_id=nutrition_dict_ids['sugar_unit_id'],
+                              vitamin_a_amount=nutrition_dict_ids['vitamin_a_amount'],
+                              vitamin_a_unit_id=nutrition_dict_ids['vitamin_a_unit_id'],
+                              vitamin_c_amount=nutrition_dict_ids['vitamin_c_amount'],
+                              vitamin_c_unit_id=nutrition_dict_ids['vitamin_c_unit_id'],
+                              calcium_amount=nutrition_dict_ids['calcium_amount'],
+                              calcium_unit_id=nutrition_dict_ids['calcium_unit_id'],
+                              iron_amount=nutrition_dict_ids['iron_amount'],
+                              iron_unit_id=nutrition_dict_ids['iron_unit_id'])
+        # print(str(nutrition))
+        session.add(nutrition)
+        session.commit()
+
         
 
 engine = build_engine(postgressql['pguser'], postgressql['pgpass'], postgressql['pghost'], postgressql['pgport'], postgressql['pgdb'])
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
-recipe_populate(session)
+nutrition_populate(session)

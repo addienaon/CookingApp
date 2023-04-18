@@ -1,4 +1,4 @@
-from airflow import DAG,PythonOperator,DummyOperator
+from pipeline import DAG,PythonOperator,DummyOperator
 from datetime import datetime
 from models import Recipe, Ingredient
 

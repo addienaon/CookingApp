@@ -331,4 +331,3 @@ engine = build_engine(postgressql['pguser'], postgressql['pgpass'], postgressql[
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
-nutrition_populate(session)

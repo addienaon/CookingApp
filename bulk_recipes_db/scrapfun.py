@@ -268,3 +268,140 @@ def breakup_ingredients(combo_ingredients):
         else: mapped_ing = ing
         ls.append(mapped_ing)
     return ls
+
+def get_nutrition(soup):
+    nutrition_values = soup.find('div', class_='wprm-nutrition-label-container wprm-nutrition-label-container-grouped wprm-block-text-normal')
+    
+    if nutrition_values:
+        cal = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-calories')
+        if cal:
+            cal_value = cal.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            cal_unit = cal.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: cal_value, cal_unit = None, None
+        carb = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-carbohydrates')
+        if carb:
+            carb_value = carb.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            carb_unit = carb.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: carb_value, carb_unit = None, None
+        protein = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-protein')
+        if protein:
+            protein_value = protein.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            protein_unit = protein.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: protein_value, protein_unit = None, None
+        fat = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-fat')
+        if fat:
+            fat_value = fat.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            fat_unit = fat.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: fat_value, fat_unit = None, None
+        sat_fat = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-saturated_fat')
+        if sat_fat:
+            sat_fat_value = sat_fat.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            sat_fat_unit = sat_fat.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: sat_fat_value, sat_fat_unit = None, None
+        poly_fat = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-polyunsaturated_fat')
+        if poly_fat:
+            poly_fat_value = poly_fat.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            poly_fat_unit = poly_fat.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: poly_fat_value, poly_fat_unit = None, None
+        mono_fat = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-monounsaturated_fat')
+        if mono_fat:
+            mono_fat_value = mono_fat.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            mono_fat_unit = mono_fat.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: mono_fat_value, mono_fat_unit = None, None
+        trans_fat = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-trans_fat')
+        if trans_fat:
+            trans_fat_value = trans_fat.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            trans_fat_unit = trans_fat.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: trans_fat_value, trans_fat_unit = None, None
+        cholesterol = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-cholesterol')
+        if cholesterol:
+            cholesterol_value = cholesterol.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            cholesterol_unit = cholesterol.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: cholesterol_value, cholesterol_unit = None, None
+        sodium = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-sodium')
+        if sodium:
+            sodium_value = sodium.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            sodium_unit = sodium.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: sodium_value, sodium_unit = None, None
+        pot = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-potassium')
+        if pot:
+            pot_value = pot.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            pot_unit = pot.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: pot_value, pot_unit = None, None
+        fiber = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-fiber')
+        if fiber:
+            fiber_value = fiber.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            fiber_unit = fiber.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: fiber_value, fiber_unit = None, None
+        sugar = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-sugar')
+        if sugar:
+            sugar_value = sugar.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            sugar_unit = sugar.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: sugar_value, sugar_unit = None, None
+        vit_a = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-vitamin_a')
+        if vit_a:
+            vit_a_value = vit_a.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            vit_a_unit = vit_a.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: vit_a_value, vit_a_unit = None, None
+        vit_c = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-vitamin_c')
+        if vit_c:
+            vit_c_value = vit_c.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            vit_c_unit = vit_c.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: vit_c_value, vit_c_unit = None, None
+        calcium = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-calcium')
+        if calcium:
+            calcium_value = calcium.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            calcium_unit = calcium.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: calcium_value, calcium_unit = None, None
+        iron = nutrition_values.find(class_='wprm-nutrition-label-text-nutrition-container wprm-nutrition-label-text-nutrition-container-iron')
+        if iron:
+            iron_value = iron.find(class_='wprm-nutrition-label-text-nutrition-value').text
+            iron_unit = iron.find(class_='wprm-nutrition-label-text-nutrition-unit').text
+        else: iron_value, iron_unit = None, None
+    else:
+        cal_value, cal_unit = None, None
+        carb_value, carb_unit = None, None
+        protein_value, protein_unit = None, None
+        fat_value, fat_unit = None, None
+        sat_fat_value, sat_fat_unit = None, None
+        poly_fat_value, poly_fat_unit = None, None
+        mono_fat_value, mono_fat_unit = None, None
+        trans_fat_value, trans_fat_unit = None, None
+        cholesterol_value, cholesterol_unit = None, None
+        sodium_value, sodium_unit = None, None
+        pot_value, pot_unit = None, None
+        fiber_value, fiber_unit = None, None
+        sugar_value, sugar_unit = None, None
+        vit_a_value, vit_a_unit = None, None
+        vit_c_value, vit_c_unit = None, None
+        calcium_value, calcium_unit = None, None
+        iron_value, iron_unit = None, None
+
+    
+    nutrition_dict = {'calories_amount':cal_value, 'calories_unit':cal_unit, 'carbohydrates_amount':carb_value, 'carbohydrates_unit':carb_unit, 
+                      'protein_amount':protein_value, 'protein_unit':protein_unit, 'fat_amount':fat_value, 'fat_unit':fat_unit, 
+                      'saturated_fat_amount':sat_fat_value, 'saturated_fat_unit':sat_fat_unit, 'polyunsaturated_fat_amount':poly_fat_value, 
+                      'polyunsaturated_fat_unit':poly_fat_unit, 'monounsaturated_fat_amount':mono_fat_value, 'monounsaturated_fat_unit':mono_fat_unit, 
+                      'trans_fat_amount':trans_fat_value, 'trans_fat_unit':trans_fat_unit, 'cholesterol_amount':cholesterol_value, 
+                      'cholesterol_unit':cholesterol_unit, 'sodium_amount':sodium_value, 'sodium_unit':sodium_unit, 
+                      'potassium_amount':pot_value, 'potassium_unit':pot_unit, 'fiber_amount':fiber_value, 'fiber_unit':fiber_unit,
+                      'sugar_amount':sugar_value, 'sugar_unit':sugar_unit, 'vitamin_a_amount':vit_a_value, 'vitamin_a_unit':vit_a_unit,
+                      'vitamin_c_amount':vit_c_value, 'vitamin_c_unit':vit_c_unit, 'calcium_amount':calcium_value, 'calcium_unit':calcium_unit,
+                      'iron_amount':iron_value, 'iron_unit':iron_unit}
+    return(nutrition_dict)
+
+
+def get_recipe_details(soup):
+    # prep_time = soup.find('span', class_='wprm-recipe-details wprm-recipe-details-minutes wprm-recipe-prep_time wprm-recipe-prep_time-minutes').text
+    # prep_time_unit = soup.find('span', class_='wprm-recipe-details-unit wprm-recipe-details-minutes wprm-recipe-prep_time-unit wprm-recipe-prep_timeunit-minutes').text
+    # cook_time = soup.find('span', class_='wprm-recipe-details wprm-recipe-details-minutes wprm-recipe-cook_time wprm-recipe-cook_time-minutes').text
+    # cook_time_unit = soup.find('span', class_='wprm-recipe-details-unit wprm-recipe-details-minutes wprm-recipe-cook_time-unit wprm-recipe-cook_timeunit-minutes').text
+    #details_dict = {'prep_time':prep_time + prep_time_unit, 'cook_time':cook_time + cook_time_unit}
+    if soup.find('span', class_='wprm-recipe-cuisine wprm-block-text-normal'):
+        cuisine = soup.find('span', class_='wprm-recipe-cuisine wprm-block-text-normal').text
+    else: cuisine = None
+    if soup.find('span', {'class': 'wprm-recipe-servings'}):
+        servings = float(soup.find('span', {'class': 'wprm-recipe-servings'}).text)
+    else: servings = None
+    details_dict = {'cuisine':cuisine, 'servings':servings}
+    return details_dict

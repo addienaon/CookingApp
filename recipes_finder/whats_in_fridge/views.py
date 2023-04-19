@@ -53,41 +53,34 @@ class IngredientListView(ListView):
                 my_food.save()
         return redirect('myfood')
 
+def myfood_view(request):
+    myfood = MyFood.objects.all().select_related('fk_ingredient').order_by('fk_ingredient__category__name')
+    categories = {}
+    for item in myfood:
+        category = item.fk_ingredient.category
+        if category:
+            if category.name not in categories:
+                categories[category.name] = []
+            categories[category.name].append(item)
 
+    if request.method == 'POST':
+        selected_items = request.POST.getlist('selected')
+        MyFood.objects.filter(pk__in=selected_items).delete()
+        return redirect('myfood')
 
-def myfood_create_view(request):
-    obj = MyFood.objects.all()  # Retrieve all existing food items
-    if request.method == "POST":
-        if "delete" in request.POST:
-            # The "delete" button was pressed
-            selected_items = request.POST.getlist("selected")  # Get a list of the selected items
-            MyFood.objects.filter(pk__in=selected_items).delete()  # Delete the selected items
-        else:
-            form = MyFoodForm(request.POST)
-            if form.is_valid():
-                user_input = form.cleaned_data.get('user_input')
-                # check if user_input value already exists in obj list
-                if not obj.filter(user_input=user_input).exists():
-                    form.save()
-                else:
-                    form.add_error('user_input', 'This food item already exists')
-    else:
-        form = MyFoodForm()
     context = {
-        'form':form,
-        'object': obj
+        'categories': categories,
     }
-    return render(request, "myfood_create.html", context)
+    return render(request, 'myfood.html', context)
 
 
-def all_ingredients_view(request, *args, **kwargs):
-   obj = Ingredient.objects.all()
-   context = {
-        'object': obj
-    }
-
-   return render(request, "ingredients.html", context)    
-
+def delete_my_food(request):
+    if request.method == 'POST':
+        selected_items = request.POST.getlist('selected')
+        for item_id in selected_items:
+            food_item = MyFood.objects.get(id=item_id)
+            food_item.delete()
+    return redirect('myfood')
 
 def recipes_view(request, *args, **kwargs):
     ingredient_count = Recipes.objects.values('recipe_id').annotate(count=Count('ingredient')).order_by('recipe_id')
@@ -111,8 +104,3 @@ def recipes_view(request, *args, **kwargs):
 
     return render(request, "recipes.html", context)
 
-
-def delete_my_food(request, id):
-    food_item = MyFood.objects.get(id=id)
-    food_item.delete()
-    return redirect("/myfood_create_view")

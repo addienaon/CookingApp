@@ -13,6 +13,12 @@
     font-family: 'Arial', sans-serif;
     font-weight: bold;
   }
+
+  .list-group-item {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    {% comment %} border:none; {% endcomment %}
+  }
   
   .scrollable {
     margin-left: 30px;
@@ -63,17 +69,6 @@
     </div>
   </div>
 </div>
-<script>
-  $(document).ready(function() {
-    var stickyOffset = $('.sticky').offset().top;
-    $(window).scroll(function(){
-      var sticky = $('.sticky'),
-          scroll = $(window).scrollTop();
-      if (scroll >= stickyOffset) sticky.addClass('fixed');
-      else sticky.removeClass('fixed');
-    });
-  });
-</script>
 {% endblock %}
 
 

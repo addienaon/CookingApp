@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Recipes</h1>
+<p>
+{% for my_sub_item in object %}
+    <li><a href="{% url 'single_recipe' my_sub_item.id my_sub_item.name %}">{{ my_sub_item.name | capfirst }}</a></li>
+{% endfor %}
+</p>
+{% endblock %}

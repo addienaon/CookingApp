@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 style="text-align: center;">My Food Items</h1>
+<style type="text/css">
+  .card-body .myfood {
+    height: 200px;
+    overflow-y: scroll;
+    width: 100%;
+    background-color: white;
+    font-size: 16px;
+  }
+  .card {
+    background-color: white;
+    padding: 0px;
+    border-radius: 10px;
+  }
+  .card-header{
+    font-weight:bold;
+    font-size: 18px;
+  }
+  .delete-btn {
+    margin-right: 10px;
+  }
+</style>
+<form method='POST'> 
+    {% csrf_token %}
+    <div class="form-group d-flex justify-content-center">
+      {% for field in form %}
+        <input type="text" class="form-control" name="{{ field.html_name }}" id="{{ field.auto_id }}" placeholder="Add New Food Item">
+        {% for error in field.errors %}
+          <span class="error">{{ error }}</span>
+        {% endfor %}
+      {% endfor %}
+      <input type='submit' value='Add' class="btn btn-primary"/>
+    </div>
+</form>
+<div class="row">
+  {% for category in myfood_categories %}
+    <div class="col-3">
+      <div class="card">
+        <div class="card-header">{{ category|upper }}</div>
+        <div class="card-body">
+          <div class="myfood">
+          <form action="{% url 'deletefood' %}" method='POST'> {% csrf_token %}
+            {% for food in myfood_data %}
+              {% if food.type == category %}
+                <div>
+                  <input type="checkbox" name="selected" value="{{ food.id }}" {% if food.selected %}checked{% endif %}> 
+                  {{ food.user_input|capfirst }}
+                </div>
+              {% endif %}
+            {% endfor %}
+            <input type='submit' name='delete' value='Delete' class="btn btn-danger
+            delete-btn"/>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+

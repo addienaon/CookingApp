@@ -11,7 +11,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
         fields = ['id', 'name', 'type']
 
-# class RecipesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Recipes
-#         fields = ['id', 'recipe', 'amount', 'unit', 'ingredient']
+class RecipesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipes
+        fields = ['id', 'recipe', 'amount', 'unit', 'ingredient']

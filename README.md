@@ -4,7 +4,7 @@ The web app is built using Django and PostgreSQL database. An Apache Airflow pip
 manali's website weekly for newly added recipes.
 
 ## Video of Functionality
-Check out this video demonstration: **[recipe finder project video demo]**(https://vimeo.com/819945402?share=copy)
+Check out this video demonstration: [**recipe finder project video demo**](https://vimeo.com/819945402).
 
 The video demo begins by displaying the 'Recipes' tab with two recipes that can be made using ingredients in 'My Food Table'. The user then adds ingredient items to two categories, 'Fruits' and 'Vegetables'. The video demonstrates that the selected items have been properly added to their respective categories in 'My Food Table'.
 

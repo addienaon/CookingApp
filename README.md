@@ -1,7 +1,18 @@
 # Project Description: Recipe Finder
 The intention of the web app is to be able to identify which recipees can be made based off of the contents of my fridge/pantry.
 The web app is built using Django and PostgreSQL database. An Apache Airflow pipeline is currently being added to check and scrape
-manali's website weekly for newly added recipes. 
+manali's website weekly for newly added recipes.
+
+## Video of Functionality
+Check out this video demonstration: **[recipe finder project video demo]**(https://vimeo.com/819945402?share=copy)
+
+The video demo begins by displaying the 'Recipes' tab with two recipes that can be made using ingredients in 'My Food Table'. The user then adds ingredient items to two categories, 'Fruits' and 'Vegetables'. The video demonstrates that the selected items have been properly added to their respective categories in 'My Food Table'.
+
+After returning to the 'Recipes' tab, the video shows that the number of available recipes has increased to six. The user then clicks on the recipe for 'Roasted Poha Chivda' to view its details, with the ingredient 'peanuts' highlighted as a requirement.
+
+The user then navigates to the 'My Food' tab and deletes the 'peanuts' from the list by accessing the nut category. Upon returning to the 'Recipes' tab, the video shows that 'Roasted Poha Chivda' is no longer available as an option since one of its required ingredients is no longer in 'My Food Table'.
+
+Finally, the user selects an available recipe and accesses a working list which directs them to the original recipe website.
 
 ## Table of Contents
 - `scrapfun.py`: functions used to scrape raw html from my favorite recipe website, [Cook with Manali](https://www.cookwithmanali.com).

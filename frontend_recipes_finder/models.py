@@ -140,31 +140,10 @@ class Food(models.Model):
         db_table = 'food'
 
 
-<<<<<<< HEAD:recipes_finder/models.py
 class Ingredient(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
     selected = models.BooleanField(blank=True, null=True)
-=======
-class Fridge(models.Model):
-    ingredients = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'fridge'
-
-class Category(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'category'
-
-        
-class Ingredient(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-    type = models.ForeignKey(Category, models.DO_NOTHING)
->>>>>>> 56890b592c12e67a70b084aec5610e748ba9570b:frontend_recipes_finder/models.py
 
     class Meta:
         managed = False
@@ -252,4 +231,3 @@ class Unit(models.Model):
     class Meta:
         managed = False
         db_table = 'unit'
-

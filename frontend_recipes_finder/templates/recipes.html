@@ -1,10 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Recipes</h1>
-<p>
-{% for my_sub_item in object %}
-    <li><a href="{% url 'single_recipe' my_sub_item.id my_sub_item.name %}">{{ my_sub_item.name | capfirst }}</a></li>
-{% endfor %}
-</p>
+<style>
+    .recipes-card {
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin: 20px auto 0;
+        padding: 20px;
+        width: 500px;
+    }
+
+    .recipes-card h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .recipes-card ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .recipes-card li {
+        margin-bottom: 10px;
+    }
+
+    .recipes-card li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    .recipes-card li a:hover {
+        color: #007bff;
+    }
+</style>
+    <div class="recipes-card">
+        <h2>Recipes Inspired by What You Have</h2>
+        <ul>
+            {% for recipe in object %}
+                <li><a href="{% url 'single_recipe' id=recipe.id name=recipe.name %}">{{ recipe.name|capfirst }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
+
+

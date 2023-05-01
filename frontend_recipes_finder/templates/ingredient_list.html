@@ -10,12 +10,12 @@
     width: 30%;
     height: 100vh;
     padding-top: 0px;
-    font-family: 'Arial', sans-serif;
+    {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
     font-weight: bold;
   }
 
   .list-group-item {
-    font-family: 'Arial', sans-serif;
+    {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
     font-size: 16px;
     {% comment %} border:none; {% endcomment %}
   }
@@ -25,7 +25,7 @@
     padding-top: 20px;
     height: 100vh;
     overflow-y: scroll;
-    font-family: 'Arial', sans-serif;
+    {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
   }
 
   .fixed-button {
@@ -34,7 +34,7 @@
     right: 30px;
     background-color: white;
     padding: 0px;
-    font-family: 'Arial', sans-serif;
+    {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
   }
 </style>
 <div class="row">
@@ -42,17 +42,17 @@
     <div class="sticky">
       <div id="list-example" class="list-group">
         {% for category_name, ingredients in categories.items %}
-          <a class="list-group-item list-group-item-action" href="#{{ category_name }}">{{ category_name }}</a>
+          <a class="list-group-item list-group-item-action" href="#{{ category_name }}">{{ category_name|title }}</a>
         {% endfor %}
       </div>
     </div>
   </div>
   <div class="col-8">
     <div class="scrollable">
-      <form method="POST" action="{% url 'ingredients-list' %}">
+      <form method="POST" action="{% url 'ingredients' %}">
       {% csrf_token %}
       {% for category_name, ingredients in categories.items %}
-        <h4 id="{{ category_name }}">{{ category_name }}</h4>
+        <h4 id="{{ category_name }}">{{ category_name|title }}</h4>
         <ul class="list-group list-group-flush">
           {% for ingredient in ingredients %}
             <li class="list-group-item">

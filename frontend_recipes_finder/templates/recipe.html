@@ -2,73 +2,142 @@
 
 {% block content %}
 
-<style type="text/css">
-  .container {
-    padding-top: 10px;
-  }
-  
-  .card {
-    background-color: #6ea777;
-    padding: 30px;
-    border-radius: 10px;
-    line-height: 0.5;
-  }
-  
-  .text-center {
-    text-align: center;
-  }
-  .ingredient-column {
-    float: left;
-    width: 33.33%;
-    text-align: center;
-    padding: 5px;
-  }
-  .amount-column {
-    float: left;
-    width: 33.33%;
-    text-align: center;
-    padding: 5px;
-  }
-  .unit-column {
-    float: right;
-    width: 33.33%;
-    text-align: center;
-    padding: 5px;
-  }
-  .list-group-item {
-    margin-bottom: 0px;
-  }
-  
-  .column {
-    float: left;
-    width: 33.33%;
-    padding: 5px;
-    text-align: center;
-  }
-</style>
-<div class="container d-flex justify-content-center">
-    <div class="card w-50 mt-5">
-      <h1 class="text-center mb-3">{{ recipe_name }}</h1>
-      <h5 class="text-center mb-3"> INGREDIENTS </h5>
-      <div class="ingredient-column">
-        <h6 class="text-center mb-3">INGREDIENT NAME</h6>
-        {% for ingredient in recipe %}
-          <li class="list-group-item">{{ ingredient.ingredient_name | capfirst }}</li>
-        {% endfor %}
-      </div>
-      <div class="amount-column">
-        <h6 class="text-center mb-3">AMOUNT</h6>
-        {% for ingredient in recipe %}
-          <li class="list-group-item">{{ ingredient.amount }}</li>
-        {% endfor %}
-      </div>
-      <div class="unit-column">
-        <h6 class="text-center mb-3">UNIT TYPE</h6>
-        {% for ingredient in recipe %}
-          <li class="list-group-item">{{ ingredient.unit_type }}</li>
-        {% endfor %}
-      </div>
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Recipe Card</title>
+	<style>
+		.recipe-card {
+			background-color: #fff;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+			display: inline-block;
+			margin: 20px;
+			padding: 20px;
+			width: 500px;
+		}
+		.recipe-card h2 {
+			font-size: 24px;
+			margin: 0;
+		}
+		.recipe-card p {
+			font-size: 16px;
+			margin: 10px 0;
+		}
+		.recipe-card .ingredients {
+			margin-top: 20px;
+		}
+		.recipe-card .ingredients h3 {
+			font-size: 18px;
+			margin: 0;
+		}
+		.recipe-card .ingredients ul {
+			list-style: none;
+			margin: 10px 0;
+			padding: 0;
+		}
+		.recipe-card .ingredients li {
+			font-size: 16px;
+			margin: 5px 0;
+		}
+    .nutrition-card {
+      background-color: #fff;
+      box-shadow: none;
+      display: inline-block;
+      margin: 20px;
+      margin-right: 200px;
+      padding: 20px;
+      width: 300px;
+      float: right;
+    }
+    .nutrition-card h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+    .nutrition-card ul {
+      list-style: none;
+      margin: 10px 0;
+      padding: 0;
+    }
+    .nutrition-card li {
+      font-size: 16px;
+      margin: 5px 0;
+    }  
+	</style>
+</head>
+<body>
+	<div class="recipe-card">
+		<h2>{{ recipe.0.recipe_name }}</h2>
+		<p>Cuisine: {{ recipe.0.recipe_cuisine }}</p>
+		<p>Servings: {{ recipe.0.recipe_servings }}</p>
+    <p><a href="{{ recipe.0.recipe_url }}" target="_blank">View recipe on origin website</a></p>
+		<div class="ingredients">
+			<h3>Ingredients:</h3>
+			<ul>
+				{% for ingredient in recipe %}
+					<li>{{ ingredient.amount }} {{ ingredient.unit_type }} {{ ingredient.ingredient_name }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+  <div class="nutrition-card">
+    <h3>Nutritional Information:</h3>
+    <ul>
+      {% for nutrient in nutrition %}
+          {% if nutrient.calories_amount %}
+            <li>Calories: {{ nutrient.calories_amount }} {{ nutrient.calories_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.carbohydrates_amount %}
+            <li>Carbohydrates: {{ nutrient.carbohydrates_amount }} {{ nutrient.carbohydrates_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.protein_amount %}
+            <li>Protein: {{ nutrient.protein_amount }} {{ nutrient.protein_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.fat_amount %}
+            <li>Fat: {{ nutrient.fat_amount }} {{ nutrient.fat_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.saturated_fat_amount %}
+            <li>Saturated Fat: {{ nutrient.saturated_fat_amount }} {{ nutrient.saturated_fat_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.polyunsaturated_fat_amount %}
+            <li>Polyunsaturated Fat: {{ nutrient.polyunsaturated_fat_amount }} {{ nutrient.polyunsaturated_fat_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.monounsaturated_fat_amount %}
+            <li>Monounsaturated Fat: {{ nutrient.monounsaturated_fat_amount }} {{ nutrient.monounsaturated_fat_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.trans_fat_amount %}
+            <li>Trans Fat: {{ nutrient.trans_fat_amount }} {{ nutrient.trans_fat_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.cholesterol_amount %}
+            <li>Cholesterol: {{ nutrient.cholesterol_amount }} {{ nutrient.cholesterol_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.sodium_amount %}
+            <li>Sodium: {{ nutrient.sodium_amount }} {{ nutrient.sodium_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.potassium_amount %}
+            <li>Potassium: {{ nutrient.potassium_amount }} {{ nutrient.potassium_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.fiber_amount %}
+            <li>Fiber: {{ nutrient.fiber_amount }} {{ nutrient.fiber_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.sugar_amount %}
+            <li>Sugar: {{ nutrient.sugar_amount }} {{ nutrient.sugar_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.vitamin_a_amount %}
+            <li>Vitamin A: {{ nutrient.vitamin_a_amount }} {{ nutrient.vitamin_a_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.vitamin_c_amount %}
+            <li>Vitamin C: {{ nutrient.vitamin_c_amount }} {{ nutrient.vitamin_c_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.calcium_amount %}
+            <li>Calcium: {{ nutrient.calcium_amount }} {{ nutrient.calcium_unit_type }}</li>
+          {% endif %}
+          {% if nutrient.iron_amount %}
+            <li>Iron: {{ nutrient.iron_amount }} {{ nutrient.iron_unit_type }}</li>
+          {% endif %}
+      {% endfor %}
+      </ul>
   </div>
-
+</body>
+</html>
 {% endblock %}

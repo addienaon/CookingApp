@@ -10,9 +10,8 @@
       width: 50%;
       height: 100vh;
       padding-top: 0px;
-      font-family: 'Arial', sans-serif;
+      {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
       font-weight: bold;
-      top: 50px;
       text-transform: capitalize;
     }
   
@@ -20,7 +19,7 @@
         display: flex;
         background-color: transparent;
         pointer-events: none;
-        font-family: 'Arial', sans-serif;
+        {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
         color: black;
         height: 4vh;
         border: none;
@@ -28,7 +27,7 @@
     
     .card-header button {
         pointer-events: none;
-        font-family: 'Arial', sans-serif;
+        {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
         color: black;
         font-size: 22px;
         line-height: 3vh;
@@ -39,7 +38,7 @@
       margin-left: 30px;
       height: 100vh;
       overflow-y: scroll;
-      font-family: 'Arial', sans-serif;
+      {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
     
     }
   
@@ -49,25 +48,25 @@
       right: 30px;
       background-color: white;
       padding: 0px;
-      font-family: 'Arial', sans-serif;
+      {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
     }
   
     .list-group-item {
-      font-family: 'Arial', sans-serif;
+      {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
       font-size: 16px;
     }
     
-    h2 {
+    {% comment %} h3 {
       text-align: center;
       position: absolute;
       top: 10px;
-      left: 18%;
-      font-family: 'Arial', sans-serif;
-    }
+      left: 18%; {% endcomment %}
+      {% comment %} font-family: 'Arial', sans-serif; {% endcomment %}
+    {% comment %} } {% endcomment %}
   </style>
   
-
-<h2>My Food Items</h2>
+{% comment %} 
+<h3>My Food Items</h3> {% endcomment %}
 
 <div class="row">
   <div class="col-4">
@@ -89,7 +88,7 @@
               <div class="card-header" id="heading{{ forloop.counter }}">
                 <h5 class="mb-0">
                   <button class="btn btn-link" type="button" aria-expanded="true" aria-controls="category{{ forloop.counter }}" data-bs-parent="#categoryAccordion">
-                    {{ category_name }}
+                    {{ category_name|title }}
                   </button>
                 </h5>
               </div>
